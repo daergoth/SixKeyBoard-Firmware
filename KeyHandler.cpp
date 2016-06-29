@@ -72,18 +72,16 @@ void KeyHandler::setupDefaults() {
 
 void KeyHandler::pressed(uint8_t key_id, byte switch_status)
 {
-	Action key_action = StorageHandler::getActionsForKey(key_id, switch_status);
+	Action* key_action = StorageHandler::getActionsForKey(key_id, switch_status);
 	
-	if (key_action.action_type == 0) {
+	if (key_action->action_type == 0) {
 		//SimpleAction
 
-		SimpleAction* a = static_cast<SimpleAction*>(&key_action);
+		SimpleAction* a = static_cast<SimpleAction*>(key_action);
 
 		switch (a->type) {
 		case 0:
 		case 1:
-      Serial.println(a->value);
-      Serial.println();
 			Keyboard.press(a->value);
 			break;
 		case 2:
@@ -103,22 +101,24 @@ void KeyHandler::pressed(uint8_t key_id, byte switch_status)
 		}
 		
 
-	} else if (key_action.action_type == 1) {
+	} else if (key_action->action_type == 1) {
 		// Macro
 
-		Macro* m = static_cast<Macro*>(&key_action);
+		Macro* m = static_cast<Macro*>(key_action);
 	}
+
+  delete key_action;
 	
 }
 
 void KeyHandler::released(uint8_t key_id, byte switch_status)
 {
-	Action key_action = StorageHandler::getActionsForKey(key_id, switch_status);
+	Action* key_action = StorageHandler::getActionsForKey(key_id, switch_status);
 
-	if (key_action.action_type == 0) {
+	if (key_action->action_type == 0) {
 		//SimpleAction
 
-		SimpleAction* a = static_cast<SimpleAction*>(&key_action);
+		SimpleAction* a = static_cast<SimpleAction*>(key_action);
 
 		switch (a->type) {
 		case 0:
@@ -143,9 +143,11 @@ void KeyHandler::released(uint8_t key_id, byte switch_status)
 
 
 	}
-	else if (key_action.action_type == 1) {
+	else if (key_action->action_type == 1) {
 		// Macro
 
-		Macro* m = static_cast<Macro*>(&key_action);
+		Macro* m = static_cast<Macro*>(key_action);
 	}
+
+ delete key_action;
 }

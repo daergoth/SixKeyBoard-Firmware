@@ -15,7 +15,7 @@
 
 class StorageHandler {
 public:
-	static Action getActionsForKey(uint8_t key_id, byte switch_status);
+	static Action* getActionsForKey(uint8_t key_id, byte switch_status);
   
 	static void setActionsForKey(uint8_t key_id, byte switch_status, Action action);
 
@@ -24,8 +24,6 @@ public:
   static void setToDefaults();
   
 private:
-  static Action* example;
-
   static unsigned int memory_end;
 
   static unsigned int memory_addresses[12];

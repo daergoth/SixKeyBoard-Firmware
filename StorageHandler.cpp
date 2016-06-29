@@ -4,22 +4,14 @@ unsigned int StorageHandler::memory_end = 0;
 
 unsigned int StorageHandler::memory_addresses[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-Action StorageHandler::getActionsForKey(uint8_t key_id, byte switch_status)
+Action* StorageHandler::getActionsForKey(uint8_t key_id, byte switch_status)
 {  
 	byte t = EEPROM.read(memory_addresses[switch_status * 6 + key_id]);
 
-  Serial.println(key_id);
-  Serial.println(memory_addresses[key_id]);
-  
-  
   if (t == 0) {
-    SimpleAction a(0, 0);
+    SimpleAction* a = new SimpleAction(0, 0);
 
-    EEPROM.get(memory_addresses[switch_status * 6 + key_id], a);
-
-    Serial.println(a.value);
-
-    Serial.println();
+    EEPROM.get(memory_addresses[switch_status * 6 + key_id], *a);
 
     return a;
   } else if (t == 1) {
@@ -46,7 +38,7 @@ void StorageHandler::setToDefaults()
 {
   unsigned int currentMemoryAddress = 0;
   
-  SimpleAction key(0, 209);
+  SimpleAction key(0, '1');
   for (byte i = 0; i < 6; ++i) {
     memory_addresses[i] = currentMemoryAddress;
     EEPROM.put(currentMemoryAddress, key);

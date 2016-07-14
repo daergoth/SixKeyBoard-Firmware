@@ -17,7 +17,7 @@ void KeyHandler::setKeyPins(uint8_t one, uint8_t two, uint8_t three, uint8_t fou
 	for (short i = 0; i < 6; ++i) {
 		if (key_pins[i] >= A0 && key_pins[i] <= A5) {
 			pinMode(key_pins[i], INPUT);
-			digitalWrite(key_pins[i], LOW);
+			analogWrite(key_pins[i], 0);
 		}
 		else {
 			pinMode(key_pins[i], INPUT_PULLUP);
@@ -28,6 +28,9 @@ void KeyHandler::setKeyPins(uint8_t one, uint8_t two, uint8_t three, uint8_t fou
 void KeyHandler::setMappingSwitchPin(uint8_t sw)
 {
 	switch_pin = sw;
+
+  pinMode(sw, INPUT);
+  analogWrite(sw, 0);
 }
 
 void KeyHandler::handleInput()
@@ -66,13 +69,13 @@ void KeyHandler::handleInput()
 	}
 }
 
-void KeyHandler::setupDefaults() {
-  
-}
-
 void KeyHandler::pressed(uint8_t key_id, byte switch_status)
 {
 	Action* key_action = StorageHandler::getActionsForKey(key_id, switch_status);
+
+  Serial.println(key_id);
+  Serial.println(switch_status);
+  Serial.println();
 	
 	if (key_action->action_type == 0) {
 		//SimpleAction
@@ -103,12 +106,48 @@ void KeyHandler::pressed(uint8_t key_id, byte switch_status)
 
 	} else if (key_action->action_type == 1) {
 		// Macro
-
 		Macro* m = static_cast<Macro*>(key_action);
+
+    switch (m->repeatability) {
+    case 0:
+
+      for (SimpleList<SimpleAction>::iterator itr = m->actions.begin(); itr != m->actions.end(); ++itr)
+      {
+        SimpleAction a = *itr;
+  
+        switch (a.type) {
+        case 0:
+        case 1:
+          Keyboard.press(a.value);
+          break;
+        case 2:
+        case 3:
+          switch (a.value) {
+          case 0:
+            Mouse.press(MOUSE_LEFT);
+            break;
+          case 1:
+            Mouse.press(MOUSE_RIGHT);
+            break;
+          case 2:
+            Mouse.press(MOUSE_MIDDLE);
+            break;
+          }
+          break;
+        }
+      }
+      
+      break;
+    case 1:
+      
+      break;
+    case 2:
+      
+      break;
+    }
 	}
 
   delete key_action;
-	
 }
 
 void KeyHandler::released(uint8_t key_id, byte switch_status)
@@ -147,6 +186,44 @@ void KeyHandler::released(uint8_t key_id, byte switch_status)
 		// Macro
 
 		Macro* m = static_cast<Macro*>(key_action);
+
+    switch (m->repeatability) {
+    case 0:
+
+      for (SimpleList<SimpleAction>::iterator itr = m->actions.begin(); itr != m->actions.end(); ++itr)
+      {
+        SimpleAction a = *itr;
+  
+        switch (a.type) {
+        case 0:
+        case 1:
+          Keyboard.release(a.value);
+          break;
+        case 2:
+        case 3:
+          switch (a.value) {
+          case 0:
+            Mouse.release(MOUSE_LEFT);
+            break;
+          case 1:
+            Mouse.release(MOUSE_RIGHT);
+            break;
+          case 2:
+            Mouse.release(MOUSE_MIDDLE);
+            break;
+          }
+          break;
+        }
+      }
+      
+      break;
+    case 1:
+      
+      break;
+    case 2:
+      
+      break;
+    }
 	}
 
  delete key_action;

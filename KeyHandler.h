@@ -23,7 +23,6 @@ public:
 	static void setKeyPins(uint8_t one, uint8_t two, uint8_t three, uint8_t four, uint8_t five, uint8_t six);
 	static void setMappingSwitchPin(uint8_t sw);
 	static void handleInput();
-  static void setupDefaults();
 
 private:
 	static uint8_t key_pins[6];

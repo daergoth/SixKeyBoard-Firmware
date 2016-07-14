@@ -1,6 +1,7 @@
 #include "StorageHandler.h"
 #include "UpdateHandler.h"
 #include "KeyHandler.h"
+#include "LightHandler.h"
 
 void onFirstPowerOn() 
 {
@@ -10,25 +11,33 @@ void onFirstPowerOn()
   }
 }
 
+void initialize() {
+  UpdateHandler::setupSerial();
+  
+  KeyHandler::setKeyPins(15, A0, 2, 8, 7, 4);
+  
+  KeyHandler::setMappingSwitchPin(A1);
+  
+  LightHandler::setLightingPins();
+
+  onFirstPowerOn();
+}
+
 void setup()
 {
   Serial.begin(250000);
 
   EEPROM.write(EEPROM.length() - 1, 255);
-  
-  onFirstPowerOn();
 
-  UpdateHandler::setupSerial();
-	KeyHandler::setKeyPins(15, A0, 2, 8, 7, 4);
-	KeyHandler::setMappingSwitchPin(A1);
-  
+  initialize();
 }
 
 void loop()
 {
-
 	KeyHandler::handleInput();
 
   UpdateHandler::handleUpdates();
+
+  LightHandler::handleLighting();
 
 }

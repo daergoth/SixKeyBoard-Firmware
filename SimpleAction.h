@@ -12,20 +12,32 @@ public:
 	* 2 - Mouse Press action
 	* 3 - Mouse Release action
 	* 4 - Mouse Move action ?
+ *  5 - Delay
 	*/
 	byte type;
 
 	/*
 	* If type 0 or 1: 
 	*	ASCII code or special key code
+  * 
 	* If type 2 or 3: 
 	*	0 - Left mouse button
 	*	1 - Right mouse button
 	*	2 - Middle mouse button
+  * 
+  * If type 5:
+  * Number of milliseconds delay
 	*/
 	byte value;
 
- SimpleAction(byte t, byte v):type(t), value(v){}
+ SimpleAction():type(0), value(0){  
+  action_type = 0; 
+ }
+
+ SimpleAction(byte t, byte v):type(t), value(v){  
+  action_type = 0; 
+ }
+ 
 };
 
 #endif

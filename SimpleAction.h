@@ -28,7 +28,7 @@ public:
   * If type 5:
   * Number of milliseconds delay
 	*/
-	byte value;
+	unsigned int value;
 
  SimpleAction():type(0), value(0){  
   action_type = 0; 

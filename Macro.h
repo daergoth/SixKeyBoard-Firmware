@@ -22,10 +22,11 @@ public:
 	* 2 - Toggled
 	*/
 	byte repeatability = 0;
+ 
 
  Macro(char* n, byte num){
 
-  for (byte i = 0; i < 21; ++i) {
+  for (byte i = 0; i < num; ++i) {
     name[i] = n[i];
   }
   

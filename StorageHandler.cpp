@@ -67,21 +67,22 @@ void StorageHandler::setToDefaults()
   char name[21] = {'E', 'x', 'a', 'm', 'p', 'l', 'e', ' ', 'n', 'a', 'm', 'e', '\0'};
   Macro macro(name, 21);
 
-  SimpleAction s(0, 'm');
+  
+  SimpleAction s(0, 128);
+  macro.addAction(s);
+  
+  s.value = 130;
+  macro.addAction(s);
+
+  s.value = 'o';
   macro.addAction(s);
   s.type = 1;
   macro.addAction(s);
 
-  s.type = 0;
-  s.value = 'a';
-  macro.addAction(s);
-  s.type = 1;
+  s.value = 130;
   macro.addAction(s);
 
-  s.type = 0;
-  s.value = 'c';
-  macro.addAction(s);
-  s.type = 1;
+  s.value = 128;
   macro.addAction(s);
 
   macro.setRepeatability(0);
@@ -116,7 +117,7 @@ void StorageHandler::saveMacro(Macro macro) {
   for (SimpleList<SimpleAction>::iterator itr = macro.actions.begin(); itr != macro.actions.end(); ++itr)
   {
     EEPROM.put(memory_end, *itr);
-    memory_end += 3;
+    memory_end += sizeof(SimpleAction);
   } 
 
   EEPROM.write(memory_end, macro.repeatability);
@@ -141,14 +142,14 @@ Macro* StorageHandler::readMacro(int byte_pos) {
 
   SimpleAction s(0, 0);
   for (byte i = 0; i < action_num; ++i) {
-    EEPROM.get(byte_pos + 23 + (i * 3), s);
+    EEPROM.get(byte_pos + 23 + (i * sizeof(SimpleAction)), s);
       
     m->addAction(s);
   }
 
   byte rep = 0;
   
-  EEPROM.get(byte_pos + 23 + (action_num * 3), rep);
+  EEPROM.get(byte_pos + 23 + (action_num * sizeof(SimpleAction)), rep);
 
   m->setRepeatability(rep);
 

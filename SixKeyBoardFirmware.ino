@@ -35,6 +35,7 @@ void setup()
 void loop()
 {
 	KeyHandler::handleInput();
+  KeyHandler::handleMacros();
 
   UpdateHandler::handleUpdates();
 

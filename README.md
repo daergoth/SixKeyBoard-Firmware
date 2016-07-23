@@ -12,12 +12,12 @@ The project will have a desktop application part as well, but that hasn't been s
 * [x] 2 keymap option at the same time
 
 ## Default keymaps
-|Keymap 1|
+|Keymap 1|||
 |----|----|----|
 |Ctrl|Up  |Shift|
 |Left|Down|Right|
 
-|Keymap 2|
+|Keymap 2|||
 |----|----|----|
 |Insert|Home|PageUp|
 |Delete|End|PageDown|

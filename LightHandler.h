@@ -14,8 +14,15 @@ class LightHandler {
 public:
   static void handleLighting();
   
-  static void setLightingPins();
+  static void setLightingPins(uint8_t commonLedOne, uint8_t commonLedTwo, uint8_t three, uint8_t four, uint8_t five, uint8_t six, uint8_t doubleLed);
+  
   static void setLightingMode(byte mode);
+
+  static void setMaxBrightness(int brightness);
+
+  static void setPulseInterval(int pulse_int);
+
+  static void setReactiveCooldown(int react_cd);
 
   static void key_down(uint8_t key_id);
 
@@ -35,6 +42,18 @@ private:
 
   // Cooldown time for reactive in milliseconds
   static int reactive_cooldown;
+
+  static uint8_t led_pins[6];
+  static uint8_t double_led_pin;
+
+  static byte pulseWay;
+  static int pulseValue;
+  static long pulseLastMillis;
+  static int pulseBaseValue;
+
+  static void lightingConstant();
+  static void lightingPulse();
+  static void lightingReactive();
 };
 
 #endif

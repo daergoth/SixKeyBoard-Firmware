@@ -18,7 +18,8 @@ void initialize() {
   
   KeyHandler::setMappingSwitchPin(A1);
   
-  LightHandler::setLightingPins();
+  LightHandler::setLightingPins(16, 14, 3, 9, 6, 5, 10);
+
 
   onFirstPowerOn();
 }

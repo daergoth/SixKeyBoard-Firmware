@@ -18,11 +18,15 @@ public:
   
   static void setLightingMode(byte mode);
 
-  static void setMaxBrightness(int brightness);
+  static void setMaxBrightness(byte brightness);
 
-  static void setPulseInterval(int pulse_int);
+  static void setPulseInterval(unsigned int pulse_int);
 
-  static void setReactiveCooldown(int react_cd);
+  static void setReactiveCooldown(unsigned int react_cd);
+
+  static void setWaveInterval(unsigned int wave_int);
+
+  static void setRandomInterval(unsigned int random_int);
 
   static void key_down(uint8_t key_id);
 
@@ -31,29 +35,41 @@ private:
   * 0 - Constant
   * 1 - Pulse
   * 2 - Reactive
+  * 3 - Wave
+  * 4 - Random 
   */
   static byte light_mode;
 
   // Maximum brightness(0 - 10)
-  static int max_brightness;
+  static byte max_brightness;
 
   // Time interval for pulsing in milliseconds
-  static int pulse_interval;
+  static unsigned int pulse_interval;
 
   // Cooldown time for reactive in milliseconds
-  static int reactive_cooldown;
+  static unsigned int reactive_cooldown;
+
+  // Time interval for wave in milliseconds
+  // Defines how much time ellapsed between wave starts
+  static unsigned int wave_interval;
+
+  // Time interval for random in milliseconds
+  // Defines how often randomizing will happen
+  static unsigned int random_interval;
 
   static uint8_t led_pins[6];
   static uint8_t double_led_pin;
 
   static byte pulseWay;
-  static int pulseValue;
-  static long pulseLastMillis;
-  static int pulseBaseValue;
+  static unsigned int pulseValue;
+  static unsigned long pulseLastMillis;
+  static unsigned int pulseBaseValue;
 
   static void lightingConstant();
   static void lightingPulse();
   static void lightingReactive();
+  static void lightingWave();
+  static void lightingRandom();
 };
 
 #endif

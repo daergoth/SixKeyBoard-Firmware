@@ -2,17 +2,19 @@
 
 byte LightHandler::light_mode = 0;
 
-int LightHandler::max_brightness = 5;
-int LightHandler::pulse_interval = 1000;
-int LightHandler::reactive_cooldown = 500;
+byte LightHandler::max_brightness = 5;
+unsigned int LightHandler::pulse_interval = 1000;
+unsigned int LightHandler::reactive_cooldown = 500;
+unsigned int LightHandler::wave_interval = 500;
+unsigned int LightHandler::random_interval = 250;
 
 uint8_t LightHandler::led_pins[] = {0, 0, 0, 0, 0, 0};
 uint8_t LightHandler::double_led_pin = 0;
 
 byte LightHandler::pulseWay = 1;
-int LightHandler::pulseValue = 0;
-int LightHandler::pulseBaseValue = 8;
-long LightHandler::pulseLastMillis = 0;
+unsigned int LightHandler::pulseValue = 0;
+unsigned int LightHandler::pulseBaseValue = 8;
+unsigned long LightHandler::pulseLastMillis = 0;
 
 void LightHandler::handleLighting() {
   
@@ -25,6 +27,12 @@ void LightHandler::handleLighting() {
     break;
   case 2:
     lightingReactive();
+    break;
+  case 3:
+    lightingWave();
+    break;
+  case 4:
+    lightingRandom();
     break;
   }
   
@@ -50,16 +58,24 @@ void LightHandler::setLightingMode(byte mode) {
   light_mode = mode;
 }
 
-void LightHandler::setMaxBrightness(int brightness) {
+void LightHandler::setMaxBrightness(byte  brightness) {
   max_brightness = brightness;
 }
 
-void LightHandler::setPulseInterval(int pulse_int) {
+void LightHandler::setPulseInterval(unsigned int pulse_int) {
   pulse_interval = pulse_int;
 }
 
-void LightHandler::setReactiveCooldown(int react_cd) {
+void LightHandler::setReactiveCooldown(unsigned int react_cd) {
   reactive_cooldown = react_cd;
+}
+
+void LightHandler::setWaveInterval(unsigned int wave_int) {
+  wave_interval = wave_int;
+}
+
+void LightHandler::setRandomInterval(unsigned int random_int) {
+  random_interval = random_int;
 }
 
 void LightHandler::key_down(uint8_t key_id) {
@@ -67,7 +83,7 @@ void LightHandler::key_down(uint8_t key_id) {
 }
 
 void LightHandler::lightingConstant() {
-  int actual_brightness = (16.0 / 10.0) * max_brightness;
+  unsigned int actual_brightness = (16.0 / 10.0) * max_brightness;
   
   digitalWrite(led_pins[0], LOW);
   digitalWrite(led_pins[1], LOW);
@@ -79,24 +95,27 @@ void LightHandler::lightingConstant() {
 }
 
 void LightHandler::lightingPulse() {
-  int actual_brightness = pulseBaseValue + max_brightness * ((millis() - pulseLastMillis) / pulseInterval);
-  float pulseStep = (millis() - pulseLastMillis) / pulseInterval * max_brightness;
-  pulseValue += pulseWay * pulseStep;
+  unsigned int actual_brightness = pulseBaseValue + ((sin(millis()) + 1.0)/2.0) * (max_brightness * (16.0 / 10.0));
   
   digitalWrite(led_pins[0], LOW);
-  digitalWrite(led_pins[1], LOW);
+  digitalWrite(led_pins[0], LOW);
   analogWrite(double_led_pin, actual_brightness);
-  
+
   for (byte i = 2; i < 6; ++i) {
     analogWrite(led_pins[i], actual_brightness);
   }
-
-  pulseLastMillis = millis();
+  
 }
 
 void LightHandler::lightingReactive() {
   
 }
 
+void LightHandler::lightingWave() {
+  
+}
 
+void LightHandler::lightingRandom() {
+  
+}
 
